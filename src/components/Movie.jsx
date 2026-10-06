@@ -15,7 +15,20 @@ const pickMime = () => MIME_TYPES.find((t) => window.MediaRecorder?.isTypeSuppor
 const canRecord = typeof window !== 'undefined' && !!window.MediaRecorder && !!pickMime()
 
 const now = () => performance.now() / 1000
+const MUSIC_DELAY = config.movie?.musicDelay ?? 0
+const MUSIC_LOOP = config.movie?.musicLoop ?? true
+const MUSIC_FADE = config.movie?.musicFadeOut ?? 0
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`
+
+// ปรับความดังเพลง: ถ้าต่อ Web Audio แล้ว (ตอนอัดวิดีโอ) ใช้ GainNode เพื่อให้เสียงในไฟล์เบาลงด้วย
+function setVolume(audio, volume) {
+  if (audio.gain) {
+    audio.gain.gain.value = volume
+    audio.el.volume = 1
+  } else {
+    audio.el.volume = volume
+  }
+}
 
 function download(blob, mime) {
   const a = document.createElement('a')
@@ -46,8 +59,42 @@ export default function Movie({ onBack, onFinish }) {
   }
   const seek = (t) => {
     clock.current = { ...clock.current, base: now(), offset: t }
-    const el = audioRef.current?.el
-    if (el && el.duration) el.currentTime = t % el.duration
+  }
+
+  // ให้เพลงเดินตามเวลาของภาพยนตร์: เพลงเริ่มที่วินาที MUSIC_DELAY
+  // (หยุด / กรอ / วนรอบใหม่ / อัดวิดีโอ เพลงจะตามไปตรงจุดเองทุกครั้ง)
+  const syncMusic = (t, total) => {
+    const audio = audioRef.current
+    if (!audio) return
+    const { el } = audio
+    const pos = t - MUSIC_DELAY
+    if (!clock.current.playing || pos < 0) {
+      if (!el.paused) el.pause()
+      if (pos < 0 && el.currentTime !== 0) el.currentTime = 0
+      return
+    }
+    if (!MUSIC_LOOP && el.duration && pos >= el.duration) {
+      if (!el.paused) el.pause() // ไม่วนเพลง: เพลงจบแล้วเงียบไปจนภาพยนตร์เริ่มรอบใหม่
+      return
+    }
+    const target = el.duration ? pos % el.duration : pos
+    if (Math.abs(el.currentTime - target) > 0.3) el.currentTime = target
+
+    // ค่อยๆ เบาลงช่วงท้ายภาพยนตร์ (และช่วงท้ายเพลง ถ้าไม่วนเพลง)
+    let volume = 1
+    if (MUSIC_FADE > 0) {
+      volume = Math.min(1, (total - t) / MUSIC_FADE)
+      if (!MUSIC_LOOP && el.duration) volume = Math.min(volume, (el.duration - pos) / MUSIC_FADE)
+      volume = Math.max(0, volume)
+    }
+    setVolume(audio, volume)
+
+    if (el.paused && !audio.starting) {
+      audio.starting = true
+      el.play()
+        .catch(() => setMuted(true)) // เบราว์เซอร์บล็อกเสียงอัตโนมัติ → ปิดเสียงไว้ ผู้ใช้กด 🔊 เปิดเองได้
+        .finally(() => (audio.starting = false))
+    }
   }
 
   // โหลดรูป + ฟอนต์ แล้วสร้าง timeline
@@ -67,20 +114,13 @@ export default function Movie({ onBack, onFinish }) {
   useEffect(() => {
     if (!config.movie?.music) return
     const el = new Audio(withBase(config.movie.music))
-    el.loop = true
+    el.loop = MUSIC_LOOP
     audioRef.current = { el }
     return () => {
       el.pause()
       audioRef.current?.ctx?.close()
     }
   }, [])
-
-  useEffect(() => {
-    const el = audioRef.current?.el
-    if (!el || !timeline) return
-    if (playing) el.play().catch(() => setMuted(true))
-    else el.pause()
-  }, [playing, timeline])
 
   useEffect(() => {
     if (audioRef.current) audioRef.current.el.muted = muted && !recording
@@ -102,6 +142,7 @@ export default function Movie({ onBack, onFinish }) {
         t = 0
       }
       drawFrame(ctx, timeline, t)
+      syncMusic(t, timeline.total)
       if (fillRef.current) fillRef.current.style.width = `${(t / timeline.total) * 100}%`
       if (timeRef.current) timeRef.current.textContent = `${fmt(t)} / ${fmt(timeline.total)}`
       raf = requestAnimationFrame(tick)
@@ -139,9 +180,11 @@ export default function Movie({ onBack, onFinish }) {
       if (!audio.ctx) {
         audio.ctx = new AudioContext()
         const source = audio.ctx.createMediaElementSource(audio.el)
+        audio.gain = audio.ctx.createGain()
         audio.dest = audio.ctx.createMediaStreamDestination()
-        source.connect(audio.ctx.destination)
-        source.connect(audio.dest)
+        source.connect(audio.gain)
+        audio.gain.connect(audio.ctx.destination)
+        audio.gain.connect(audio.dest)
       }
       await audio.ctx.resume()
       audio.dest.stream.getAudioTracks().forEach((track) => stream.addTrack(track))
