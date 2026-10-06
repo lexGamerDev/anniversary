@@ -10,8 +10,10 @@ const cardVariants = {
   exit: (dir) => ({ opacity: 0, x: dir * -220, rotate: dir * -8, scale: 0.85, transition: { duration: 0.4 } }),
 }
 
+// path ที่ขึ้นต้นด้วย / จะถูกเติม base URL ให้ (เช่น /anniversary/ บน GitHub Pages)
+const withBase = (src) => (src.startsWith('/') ? import.meta.env.BASE_URL + src.slice(1) : src)
 // รองรับทั้ง images: [...] และ image: '...' แบบเดิม
-const getImages = (m) => m.images ?? (m.image ? [m.image] : [])
+const getImages = (m) => (m.images ?? (m.image ? [m.image] : [])).map(withBase)
 const momentDuration = (m) => Math.max(autoplayDelay, getImages(m).length * photoDelay)
 
 function Gallery({ moment, index }) {
