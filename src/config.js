@@ -55,7 +55,7 @@ export const config = {
       emoji: '🌹',
     },
     {
-      date: 'February 2026',
+      date: 'March 2026',
       title: 'วันเกิดของเธอ',
       caption: 'ตื่นเต้นจนกินข้าวแทบไม่ลง แต่ก็มีความสุขมากๆ',
       images: ['/photos/5.1.jpeg', '/photos/5.2.jpeg', '/photos/5.3.jpeg'],
