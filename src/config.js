@@ -2,8 +2,8 @@
 
 export const config = {
   // ชื่อของเราสองคน
-  me: 'เค้า',
-  partner: 'ตัวเอง',
+  me: 'Lex',
+  partner: 'Nok',
 
   // วันที่เริ่มคบกัน (ปี-เดือน-วัน)
   startDate: '2025-10-05',
