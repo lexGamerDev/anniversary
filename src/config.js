@@ -22,58 +22,75 @@ export const config = {
   // ในโหมด Auto จะรอให้วนครบทุกรูปก่อนค่อยไป moment ถัดไป
   photoDelay: 2500,
 
+  // โหมดภาพยนตร์ (เล่นวนอัตโนมัติ + ดาวน์โหลดเป็นวิดีโอได้)
+  movie: {
+    photoDuration: 3, // วินาทีต่อ 1 รูป
+    // เพลงประกอบ (ไม่บังคับ) — ใส่ไฟล์ไว้ที่ public/music แล้วใส่ path เช่น '/music/song.mp3'
+    // ถ้าใส่ เพลงจะติดไปในวิดีโอที่ดาวน์โหลดด้วย
+    music: null,
+  },
+
   // ความทรงจำต่างๆ — ใส่รูปไว้ที่โฟลเดอร์ public/photos แล้วใส่ชื่อไฟล์ใน images
   // ใส่กี่รูปก็ได้ต่อ 1 moment (รูปเดียวก็ได้)
   // ถ้ายังไม่มีรูป จะแสดงเป็นการ์ดสีพร้อม emoji แทน
   moments: [
     {
+      date: 'October 2025',
+      title: 'เดตแรกของเรา',
+      caption: 'ตื่นเต้นสุดๆ แต่ก็เป็นการเริ่มต้นที่ดี',
+      images: ['/photos/0.1.jpeg', '/photos/0.2.jpeg', '/photos/0.3.jpeg'],
+      emoji: '✨',
+    },
+    {
       date: 'December 2025',
       title: 'วันธรรมดาที่พิเศษ',
       caption: 'แค่นั่งดูหนังด้วยกัน ก็เป็นวันที่ดีที่สุดแล้ว',
-      images: ['/photos/0.1.jpeg', '/photos/0.2.jpeg', '/photos/0.3.jpeg', '/photos/0.4.jpeg', '/photos/0.5.jpeg'],
+      images: ['/photos/1.1.jpeg', '/photos/1.2.jpeg', '/photos/1.3.jpeg', '/photos/1.4.jpeg'],
       emoji: '✨',
     },
     {
       date: 'December 2025',
       title: 'เที่ยวท้ายปี',
-      caption: 'เป็นครั้งแรกที่ได้นอนด้วยกัน',
-      images: ['/photos/1.1.jpeg', '/photos/1.2.jpeg', '/photos/1.3.jpeg', '/photos/1.4.jpeg'],
+      caption: 'ถึงแม้ว่าจะเป็นช่วงเวลาสั้นๆ แต่ก็สนุกสุดๆ',
+      images: ['/photos/2.1.jpeg', '/photos/2.2.jpeg', '/photos/2.3.jpeg', '/photos/2.4.jpeg'],
       emoji: '✨',
     },
     {
       date: 'January 2026',
       title: 'เดตแรกของปี',
       caption: 'ได้ทำกิจกรรมใหม่ๆ ร่วมกัน',
-      images: ['/photos/2.1.jpeg', '/photos/2.2.jpeg', '/photos/2.3.jpeg', '/photos/2.4.jpeg', '/photos/2.5.jpeg'],
+      images: ['/photos/3.1.jpeg', '/photos/3.2.jpeg', '/photos/3.3.jpeg', '/photos/3.4.jpeg', '/photos/3.5.jpeg'],
       emoji: '✨',
     },
     {
       date: 'February 2026',
       title: 'วาเลนไทน์ของเรา',
       caption: 'ดอกไม้ช่อเล็กๆ กับความรักที่ใหญ่มาก',
-      images: ['/photos/4.1.jpeg', '/photos/4.2.jpeg', '/photos/4.3.jpeg', '/photos/4.4.jpeg'],
+      // images: ['/photos/4.1.jpeg', '/photos/4.2.jpeg', '/photos/4.3.jpeg', '/photos/4.4.jpeg'],
+      images: ['/photos/4.2.jpeg', '/photos/4.3.jpeg', '/photos/4.4.jpeg'],
       emoji: '🌹',
     },
     {
       date: 'March 2026',
       title: 'วันเกิดของเธอ',
-      caption: 'ตื่นเต้นจนกินข้าวแทบไม่ลง แต่ก็มีความสุขมากๆ',
-      images: ['/photos/5.1.jpeg', '/photos/5.2.jpeg', '/photos/5.3.jpeg'],
+      caption: 'ได้ทานเข้ากับแม่เธอครั้งแรกตื่นเต้นจนกินข้าวแทบไม่ลง แต่ก็มีความสุขมากๆ',
+      images: ['/photos/5.1.jpeg', '/photos/5.2.jpeg'],
       emoji: '🍰',
     },
     {
       date: 'June 2026',
-      title: 'เที่ยวต่างประเทศคด้วยกันรั้งแรกของเรา',
+      // title: 'เที่ยวต่างประเทศด้วยกันครั้งแรก',
+      title: 'เที่ยวกลางปี',
       caption: 'เป็นทริปที่สนุกมากๆ และได้เห็นโลกกว้างขึ้น',
       images: ['/photos/6.1.jpeg', '/photos/6.2.jpeg', '/photos/6.3.jpeg'],
-      emoji: '🌊',
+      emoji: '✈️',
     },
     {
       date: 'September 2026',
-      title: 'วันรับใบประริญญาของเธอ',
-      caption: 'เป็นวันที่สำคัญมากๆ ของเธอ และ เป็นวันที่เค้าภูมิใจในตัวเธอมากที่สุด',
-      images: ['/photos/7.1.jpeg', '/photos/7.2.jpeg', '/photos/7.3.jpeg'],
-      emoji: '🌹',
+      title: 'วันรับปริญญาของเธอ',
+      caption: 'เป็นวันที่สำคัญมากๆ ของเธอ และเป็นวันที่เค้าภูมิใจในตัวเธอมากที่สุด',
+      images: ['/photos/7.1.jpeg', '/photos/7.2.jpeg'],
+      emoji: '🎓',
     },
   ],
 

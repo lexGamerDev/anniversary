@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { config } from '../config.js'
+import { daysTogether } from '../utils.js'
 
 const container = {
   hidden: {},
@@ -11,12 +12,7 @@ const item = {
   show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease: 'easeOut' } },
 }
 
-function daysTogether() {
-  const start = new Date(config.startDate)
-  return Math.max(0, Math.floor((Date.now() - start.getTime()) / 86400000))
-}
-
-export default function Intro({ onStart }) {
+export default function Intro({ onStart, onMovie }) {
   const letters = config.intro.title.split('')
 
   return (
@@ -55,15 +51,14 @@ export default function Intro({ onStart }) {
         {config.intro.message}
       </motion.p>
 
-      <motion.button
-        className="btn btn-primary"
-        variants={item}
-        whileHover={{ scale: 1.06 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onStart}
-      >
-        ย้อนดูความทรงจำ 💌
-      </motion.button>
+      <motion.div className="controls" variants={item}>
+        <motion.button className="btn btn-primary" whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }} onClick={onStart}>
+          ย้อนดูความทรงจำ 💌
+        </motion.button>
+        <motion.button className="btn btn-ghost" whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.95 }} onClick={onMovie}>
+          ดูแบบภาพยนตร์ 🎬
+        </motion.button>
+      </motion.div>
     </motion.section>
   )
 }

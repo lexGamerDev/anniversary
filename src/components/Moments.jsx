@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { config } from '../config.js'
+import { knownImages, probeMoment } from '../utils.js'
 
 const { moments, autoplayDelay, photoDelay } = config
 
@@ -10,16 +11,23 @@ const cardVariants = {
   exit: (dir) => ({ opacity: 0, x: dir * -220, rotate: dir * -8, scale: 0.85, transition: { duration: 0.4 } }),
 }
 
-// path ที่ขึ้นต้นด้วย / จะถูกเติม base URL ให้ (เช่น /anniversary/ บน GitHub Pages)
-const withBase = (src) => (src.startsWith('/') ? import.meta.env.BASE_URL + src.slice(1) : src)
-// รองรับทั้ง images: [...] และ image: '...' แบบเดิม
-const getImages = (m) => (m.images ?? (m.image ? [m.image] : [])).map(withBase)
-const momentDuration = (m) => Math.max(autoplayDelay, getImages(m).length * photoDelay)
+// รายการรูปที่โหลดได้จริงของ moment นี้ (null = กำลังเช็ค)
+function useValidImages(moment) {
+  const [result, setResult] = useState(() => ({ moment, images: knownImages(moment) }))
+  useEffect(() => {
+    let alive = true
+    probeMoment(moment).then((images) => alive && setResult({ moment, images }))
+    return () => {
+      alive = false
+    }
+  }, [moment])
+  return result.moment === moment ? result.images : knownImages(moment)
+}
 
-function Gallery({ moment, index }) {
+function Gallery({ moment, index, images: validImages }) {
   const [failed, setFailed] = useState([])
   const [photo, setPhoto] = useState(0)
-  const images = getImages(moment).filter((src) => !failed.includes(src))
+  const images = (validImages ?? []).filter((src) => !failed.includes(src))
   const count = images.length
   const current = count ? photo % count : 0
 
@@ -28,6 +36,8 @@ function Gallery({ moment, index }) {
     const t = setTimeout(() => setPhoto((p) => (p + 1) % count), photoDelay)
     return () => clearTimeout(t)
   }, [photo, count])
+
+  if (!validImages) return <div className="gallery" /> // ยังเช็ครูปไม่เสร็จ
 
   if (!count) {
     const hue = (index * 47 + 330) % 360
@@ -77,7 +87,8 @@ export default function Moments({ onFinish }) {
   const [auto, setAuto] = useState(false)
   const isLast = index === moments.length - 1
   const moment = moments[index]
-  const duration = momentDuration(moment)
+  const images = useValidImages(moment)
+  const duration = Math.max(autoplayDelay, (images?.length ?? 0) * photoDelay)
 
   const go = useCallback(
     (step) => {
@@ -121,7 +132,7 @@ export default function Moments({ onFinish }) {
         <AnimatePresence custom={dir} mode="popLayout" initial={false}>
           <motion.article
             key={index}
-            className={`polaroid ${getImages(moment).length > 1 ? 'stacked' : ''}`}
+            className={`polaroid ${images?.length > 1 ? 'stacked' : ''}`}
             custom={dir}
             variants={cardVariants}
             initial="enter"
@@ -136,7 +147,7 @@ export default function Moments({ onFinish }) {
           >
             <div className="polaroid-inner">
               <div className="tape" />
-              <Gallery moment={moment} index={index} />
+              <Gallery moment={moment} index={index} images={images} />
               <motion.div
                 className="polaroid-text"
                 initial={{ opacity: 0, y: 12 }}
