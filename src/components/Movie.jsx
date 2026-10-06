@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { config } from '../config.js'
+import { config } from '../content.js'
 import { withBase } from '../utils.js'
 import { FPS, H, W, buildTimeline, drawFrame, loadAssets } from '../movie/engine.js'
 

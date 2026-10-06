@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { config } from '../config.js'
+import { config } from '../content.js'
 import { daysTogether } from '../utils.js'
 
 const container = {

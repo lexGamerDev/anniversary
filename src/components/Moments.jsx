@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { config } from '../config.js'
+import { config } from '../content.js'
 import { knownImages, probeMoment } from '../utils.js'
 
 const { moments, autoplayDelay, photoDelay } = config

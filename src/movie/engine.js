@@ -1,6 +1,6 @@
 // วาดภาพยนตร์ลง <canvas> ทีละเฟรม — ทุกอย่างคำนวณจากเวลา t (วินาที)
 // จึงเล่นซ้ำ / กรอ / อัดเป็นวิดีโอได้ผลเหมือนกันทุกครั้ง
-import { config } from '../config.js'
+import { config } from '../content.js'
 import { daysTogether, getImages } from '../utils.js'
 
 export const W = 1080

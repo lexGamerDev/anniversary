@@ -5,7 +5,7 @@ import Intro from './components/Intro.jsx'
 import Moments from './components/Moments.jsx'
 import Outro from './components/Outro.jsx'
 import Movie from './components/Movie.jsx'
-import { config } from './config.js'
+import { config } from './content.js'
 import { probeMoment } from './utils.js'
 
 export default function App() {
@@ -14,6 +14,7 @@ export default function App() {
   // เริ่มเช็ครูปตั้งแต่หน้าแรก พอถึงหน้า Moments ตัวนับรูปจะพร้อมแล้ว
   useEffect(() => {
     config.moments.forEach(probeMoment)
+    document.title = `${config.intro.title} 💖`
   }, [])
 
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { config } from '../config.js'
+import { config } from '../content.js'
 
 const { outro } = config
 const LINE_GAP = 1.4
