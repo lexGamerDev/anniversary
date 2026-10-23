@@ -59,6 +59,10 @@ export default function Intro({ onStart, onMovie }) {
           ดูแบบภาพยนตร์ 🎬
         </motion.button>
       </motion.div>
+
+      <motion.a className="back-home" variants={item} href={import.meta.env.BASE_URL}>
+        ← กลับหน้าหลัก
+      </motion.a>
     </motion.section>
   )
 }

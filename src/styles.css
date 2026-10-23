@@ -386,3 +386,6 @@ body {
 .movie-progress.locked { cursor: default; }
 .movie-progress-fill { width: 0; height: 100%; background: linear-gradient(90deg, var(--pink), var(--pink-deep)); }
 .movie-time { font-size: 0.8rem; color: var(--muted); margin-top: -10px; font-variant-numeric: tabular-nums; }
+
+.back-home { color: var(--muted); font-size: .9rem; text-decoration: none; }
+.back-home:hover { color: var(--pink-deep); }

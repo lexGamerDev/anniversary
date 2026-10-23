@@ -1,0 +1,71 @@
+:root { --pink: #ff6b9d; --pink-deep: #e0457b; --ink: #4a2c3a; --muted: #8b6b78; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body, #root { min-height: 100%; margin: 0; }
+body { font-family: 'Mitr', system-ui, sans-serif; font-weight: 300; color: var(--ink); background: #fff1e8; }
+
+.hm {
+  position: relative; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center;
+  padding: 32px 16px; overflow: hidden;
+  background: linear-gradient(160deg, #ffe4ec 0%, #fff1e8 45%, #f3e4ff 100%);
+}
+.hm-glow {
+  position: fixed; inset: -20%; pointer-events: none; animation: hm-glow 16s ease-in-out infinite alternate;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 107, 157, .28), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255, 209, 102, .3), transparent 40%),
+    radial-gradient(circle at 60% 10%, rgba(176, 92, 255, .22), transparent 38%);
+}
+@keyframes hm-glow { to { transform: rotate(12deg) scale(1.1); } }
+
+.hm-float { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.hm-float span { position: absolute; bottom: -50px; opacity: 0; animation: hm-rise linear infinite; }
+@keyframes hm-rise {
+  0% { transform: translate(0, 0) rotate(0); opacity: 0; }
+  10% { opacity: .75; }
+  90% { opacity: .5; }
+  100% { transform: translate(var(--drift), -115vh) rotate(360deg); opacity: 0; }
+}
+
+.hm-content { position: relative; z-index: 1; width: 100%; max-width: 760px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.hm-names { font-family: 'Sriracha', cursive; font-size: 1.4rem; color: var(--pink-deep); margin: 0; }
+.hm-names span { font-family: 'Great Vibes', cursive; font-size: 1.8rem; margin: 0 6px; }
+.hm-title {
+  font-family: 'Sriracha', cursive; font-weight: 400; font-size: clamp(2rem, 8vw, 3rem); margin: 0 0 18px;
+  background: linear-gradient(90deg, var(--pink-deep), #b05cff, #ff9f43, var(--pink-deep));
+  background-size: 250% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: hm-shimmer 5s linear infinite;
+}
+@keyframes hm-shimmer { to { background-position: 250% center; } }
+
+.hm-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
+@media (max-width: 560px) { .hm-cards { grid-template-columns: 1fr; } }
+
+.hm-card {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 34px 20px 26px; border-radius: 28px; text-decoration: none; color: var(--ink); overflow: hidden;
+  background: rgba(255, 255, 255, .72); backdrop-filter: blur(12px); border: 2px solid rgba(255, 255, 255, .9);
+  box-shadow: 0 16px 40px rgba(224, 69, 123, .18); transform-style: preserve-3d;
+}
+.hm-card::before {
+  content: ''; position: absolute; inset: 0; opacity: .55; z-index: -1;
+  background: linear-gradient(135deg, var(--a), var(--b));
+}
+.hm-card.love { --a: #ffc2d6; --b: #ffe4ec; }
+.hm-card.bday { --a: #ffe08a; --b: #e5d0ff; }
+.hm-card::after {
+  content: ''; position: absolute; top: -60%; left: -40%; width: 60%; height: 220%; transform: rotate(20deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent);
+  animation: hm-sheen 4.5s ease-in-out infinite;
+}
+.hm-card.bday::after { animation-delay: 1.2s; }
+@keyframes hm-sheen { 0%, 60% { left: -50%; } 100% { left: 130%; } }
+
+.hm-emoji { font-size: 4.2rem; line-height: 1; animation: hm-beat 1.4s ease-in-out infinite; filter: drop-shadow(0 8px 14px rgba(224, 69, 123, .3)); transform: translateZ(40px); }
+.bday .hm-emoji { animation-name: hm-wiggle; animation-duration: 1.8s; }
+@keyframes hm-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.12); } }
+@keyframes hm-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-10deg) scale(1.08); } 75% { transform: rotate(10deg) scale(1.08); } }
+.hm-card-title { font-family: 'Sriracha', cursive; font-size: 1.7rem; color: var(--pink-deep); margin-top: 6px; }
+.hm-card-desc { color: var(--muted); font-size: .95rem; }
+.hm-go { margin-top: 10px; padding: 8px 20px; border-radius: 999px; color: #fff; font-size: .95rem; background: linear-gradient(135deg, var(--pink), var(--pink-deep)); box-shadow: 0 6px 16px rgba(224, 69, 123, .35); }
+
+@media (prefers-reduced-motion: reduce) { .hm-glow, .hm-float span, .hm-title, .hm-emoji, .hm-card::after { animation: none; } }
