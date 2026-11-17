@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { config } from '../config.js'
 import { confetti } from '../effects.js'
 import { rand } from '../utils.js'
+import { sfx } from '../sfx.js'
 
 const COLORS = [
   ['#ff8fb7', '#e0457b'],
@@ -37,6 +38,7 @@ export default function Balloons({ onDone }) {
     if (popped[i]) return
     const r = e.currentTarget.getBoundingClientRect()
     confetti({ x: (r.left + r.width / 2) / window.innerWidth, y: (r.top + r.height / 2) / window.innerHeight, count: 40, spread: 180, power: 0.6 })
+    sfx.pop()
     setPopped((p) => ({ ...p, [i]: true }))
     setCurrent(i)
   }
@@ -96,7 +98,7 @@ export default function Balloons({ onDone }) {
 
       {all && (
         <motion.button className="bd-btn bd-btn-primary" initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.8, type: 'spring' }} onClick={onDone}>
-          ไปดูรูปกัน 📸
+          ไปเล่นเกมกัน 🎮
         </motion.button>
       )}
     </div>

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { age, config } from '../config.js'
 import { cannons, confetti, confettiRain } from '../effects.js'
+import { sfx } from '../sfx.js'
 import { useBlow } from '../useBlow.js'
 
 const CANDLES = Math.min(age, 7)
@@ -49,6 +50,7 @@ export default function Cake({ onDone }) {
       if (prev.has(i)) return prev
       const next = new Set(prev)
       next.add(i)
+      sfx.blow()
       return next
     })
   }, [])
@@ -77,6 +79,7 @@ export default function Cake({ onDone }) {
     if (phase !== 'dark') return
     const t = setTimeout(() => {
       setPhase('lit')
+      sfx.tada()
       cannons()
       confettiRain(4500)
     }, 1500)

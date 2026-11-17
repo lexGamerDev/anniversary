@@ -196,3 +196,23 @@ export function sparkle(px, py) {
   }
   start()
 }
+
+// อีโมจิลอยขึ้นจากจุดที่แตะ (DOM ล้วน ลบตัวเองเมื่อจบ)
+const EMOJI = ['🎉', '💖', '🎂', '✨', '🎈', '🥳', '🍰', '🌟']
+export function floatEmoji(x, y, n = 5) {
+  for (let i = 0; i < n; i++) {
+    const el = document.createElement('span')
+    el.textContent = pick(EMOJI)
+    const dx = rand(-70, 70)
+    el.style.cssText = `position:fixed;left:${x}px;top:${y}px;font-size:${rand(1.2, 2.2)}rem;pointer-events:none;z-index:30;`
+    document.body.appendChild(el)
+    const anim = el.animate(
+      [
+        { transform: 'translate(-50%,-50%) scale(.4)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${dx}px), ${-rand(90, 200)}px) scale(1.1) rotate(${rand(-40, 40)}deg)`, opacity: 0 },
+      ],
+      { duration: rand(900, 1500), easing: 'ease-out', delay: i * 40 }
+    )
+    anim.onfinish = () => el.remove()
+  }
+}

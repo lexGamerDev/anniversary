@@ -10,11 +10,12 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      // หลายหน้า: / = หน้าหลัก, /love/ = ครบรอบ, /birthday/ = วันเกิด
+      // หลายหน้า: / = หน้าหลัก, /love/ = ครบรอบ, /birthday/ = วันเกิด, /valentine/ = วาเลนไทน์
       input: {
         main: page('./index.html'),
         love: page('./love/index.html'),
         birthday: page('./birthday/index.html'),
+        valentine: page('./valentine/index.html'),
       },
     },
   },

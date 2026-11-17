@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { animate, motion } from 'framer-motion'
 import { age, config } from '../config.js'
 import { cannons, confetti, confettiRain, fireworks } from '../effects.js'
+import { sfx } from '../sfx.js'
 import { BASE } from '../utils.js'
 
 const { gift } = config
@@ -26,8 +27,10 @@ export default function Gift({ onReplay }) {
     if (open) return
     const n = taps + 1
     setTaps(n)
+    sfx.pop()
     confetti({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight, count: 10 + n * 4, spread: 100, power: 0.4 })
     if (n >= gift.tapsToOpen) {
+      sfx.tada()
       cannons()
       stops.current.push(fireworks(10, 650), confettiRain(7000))
     }

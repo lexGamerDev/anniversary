@@ -181,6 +181,11 @@ button { font-family: inherit; }
 .bd-balloon::before { content: ''; position: absolute; left: 50%; top: 100%; width: 1.5px; height: 56px; background: rgba(74, 44, 58, .35); }
 .bd-balloon-shine { position: absolute; left: 16px; top: 14px; width: 14px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.55); transform: rotate(25deg); }
 
+/* ---------- Catch game ---------- */
+.bd-game-scene { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 8px; }
+.bd-arena { position: relative; width: min(100%, 400px); height: min(58vh, 460px); overflow: hidden; border-radius: 20px; background: rgba(255,255,255,.45); border: 2px dashed var(--rose); touch-action: manipulation; }
+.bd-faller { position: absolute; border: 0; padding: 0; background: none; line-height: 1; cursor: pointer; transform: translateX(-50%); user-select: none; }
+
 /* ---------- Photos ---------- */
 .bd-photo-scene { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 14px; }
 .bd-stack { position: relative; width: min(74vw, 290px); height: min(96vw, 380px); margin: 6px 0 8px; }

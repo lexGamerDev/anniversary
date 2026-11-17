@@ -2,17 +2,19 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { config } from './config.js'
 import { withBase } from './utils.js'
-import { attachEffects, cannons, sparkle } from './effects.js'
+import { attachEffects, cannons, sparkle, floatEmoji } from './effects.js'
+import { sfx } from './sfx.js'
 import Gate from './components/Gate.jsx'
 import Bunting from './components/Bunting.jsx'
 import FloatingParty from './components/FloatingParty.jsx'
 import Cake from './components/Cake.jsx'
 import Balloons from './components/Balloons.jsx'
+import CatchGame from './components/CatchGame.jsx'
 import Photos from './components/Photos.jsx'
 import Letter from './components/Letter.jsx'
 import Gift from './components/Gift.jsx'
 
-const SCENES = ['cake', 'balloons', 'photos', 'letter', 'gift']
+const SCENES = ['cake', 'balloons', 'game', 'photos', 'letter', 'gift']
 
 function useMusic() {
   const audio = useRef(null)
@@ -85,7 +87,32 @@ export default function BirthdayApp() {
     }
   }
 
+  // แตะที่ว่างตรงไหนก็มีอีโมจิลอยขึ้น (ไม่ทับปุ่ม/การ์ด)
+  const onTap = (e) => {
+    if (!lit || e.target.closest('button, a, li, svg, .bd-card, .bd-arena')) return
+    floatEmoji(e.clientX, e.clientY)
+  }
+
+  // เขย่ามือถือ = ยิงคอนเฟตติ
+  useEffect(() => {
+    if (!lit) return
+    let lastShake = 0
+    const onMotion = (e) => {
+      const a = e.accelerationIncludingGravity
+      if (!a) return
+      const now = Date.now()
+      if (Math.hypot(a.x || 0, a.y || 0, a.z || 0) > 28 && now - lastShake > 1500) {
+        lastShake = now
+        sfx.tada()
+        cannons()
+      }
+    }
+    window.addEventListener('devicemotion', onMotion)
+    return () => window.removeEventListener('devicemotion', onMotion)
+  }, [lit])
+
   const turnOn = () => {
+    sfx.song()
     setLit(true)
     music.play()
     setTimeout(cannons, 700)
@@ -100,7 +127,7 @@ export default function BirthdayApp() {
   const idx = SCENES.indexOf(scene)
 
   return (
-    <main className="bd-app" data-lit={lit} onPointerMove={onMove}>
+    <main className="bd-app" data-lit={lit} onPointerMove={onMove} onClick={onTap}>
       <div className="bd-night" aria-hidden="true">
         <Stars />
         <div className="bd-moon" />
@@ -131,6 +158,7 @@ export default function BirthdayApp() {
           <motion.div key={`${scene}-${run}`} className="bd-scene" variants={sceneVariants} initial="initial" animate="animate" exit="exit">
             {scene === 'cake' && <Cake onDone={next} />}
             {scene === 'balloons' && <Balloons onDone={next} />}
+            {scene === 'game' && <CatchGame onDone={next} />}
             {scene === 'photos' && <Photos onDone={next} />}
             {scene === 'letter' && <Letter onDone={next} />}
             {scene === 'gift' && <Gift onReplay={replay} />}

@@ -19,9 +19,16 @@ const CHOICES = [
     desc: 'เป่าเทียน แตกลูกโป่ง เปิดของขวัญ',
     cls: 'bday',
   },
+  {
+    href: `${BASE}valentine/`,
+    emoji: '💙',
+    title: 'วาเลนไทน์',
+    desc: 'ช่อไฮเดรนเยียสีฟ้า และคำถามสำคัญ',
+    cls: 'vday',
+  },
 ]
 
-const SYMBOLS = ['💗', '🎈', '✨', '💕', '🎉', '🤍', '🎁', '💖']
+const SYMBOLS = ['💗', '🎈', '💙', '✨', '💕', '🎉', '🤍', '🎁', '💖']
 
 // การ์ดเอียงตามตำแหน่งเมาส์/นิ้ว
 function Card({ c, i }) {
@@ -62,7 +69,7 @@ function Card({ c, i }) {
 
 export default function Home() {
   useEffect(() => {
-    document.title = `${config.me} & ${config.partner} 💖🎂`
+    document.title = `${config.me} & ${config.partner} 💖🎂💙`
   }, [])
 
   const floaters = useMemo(

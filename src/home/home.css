@@ -37,8 +37,8 @@ body { font-family: 'Mitr', system-ui, sans-serif; font-weight: 300; color: var(
 }
 @keyframes hm-shimmer { to { background-position: 250% center; } }
 
-.hm-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 100%; }
-@media (max-width: 560px) { .hm-cards { grid-template-columns: 1fr; } }
+.hm-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
+@media (max-width: 760px) { .hm-cards { grid-template-columns: 1fr; } }
 
 .hm-card {
   position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -52,18 +52,21 @@ body { font-family: 'Mitr', system-ui, sans-serif; font-weight: 300; color: var(
 }
 .hm-card.love { --a: #ffc2d6; --b: #ffe4ec; }
 .hm-card.bday { --a: #ffe08a; --b: #e5d0ff; }
+.hm-card.vday { --a: #a9c4ff; --b: #e3eeff; }
 .hm-card::after {
   content: ''; position: absolute; top: -60%; left: -40%; width: 60%; height: 220%; transform: rotate(20deg);
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .65), transparent);
   animation: hm-sheen 4.5s ease-in-out infinite;
 }
 .hm-card.bday::after { animation-delay: 1.2s; }
+.hm-card.vday::after { animation-delay: 2.4s; }
 @keyframes hm-sheen { 0%, 60% { left: -50%; } 100% { left: 130%; } }
 
 .hm-emoji { font-size: 4.2rem; line-height: 1; animation: hm-beat 1.4s ease-in-out infinite; filter: drop-shadow(0 8px 14px rgba(224, 69, 123, .3)); transform: translateZ(40px); }
 .bday .hm-emoji { animation-name: hm-wiggle; animation-duration: 1.8s; }
 @keyframes hm-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.12); } }
 @keyframes hm-wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-10deg) scale(1.08); } 75% { transform: rotate(10deg) scale(1.08); } }
+.vday .hm-emoji { filter: drop-shadow(0 8px 14px rgba(53, 86, 200, .35)); }
 .hm-card-title { font-family: 'Sriracha', cursive; font-size: 1.7rem; color: var(--pink-deep); margin-top: 6px; }
 .hm-card-desc { color: var(--muted); font-size: .95rem; }
 .hm-go { margin-top: 10px; padding: 8px 20px; border-radius: 999px; color: #fff; font-size: .95rem; background: linear-gradient(135deg, var(--pink), var(--pink-deep)); box-shadow: 0 6px 16px rgba(224, 69, 123, .35); }
